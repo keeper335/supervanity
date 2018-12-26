@@ -26,7 +26,7 @@
 #define STEP 3072
 #define BIG_STEP STEP*600000
 #define THREADS_NUM 4
-#define ADDRESS_NUM 2
+#define ADDRESS_NUM 3
 #define ERROR_CREATE_THREAD     -11
 
 #include "src/libsecp256k1-config.h"
@@ -39,7 +39,7 @@
 
 const char fname_result[] = "found.txt";
 
-const char *adr_to_find[] = {"1LzhS3k3e9Ub8i2W1V8xQFdB8n2MYCHPCa", "17aPYR1m6pVAacXg1PTDDU7XafvK1dxvhi"};
+const char *adr_to_find[] = {"1HAX2n9Uruu9YDt4cqRgYcvtGvZj1rbUyt", "1Kn5h2qpgw9mWE5jKpk8PP4qvvJ1QVy8su", "1AVJKwzs9AskraJLGHAZPiaZcrpDr1U6AB"};
 
 /* Global command-line settings */
 
@@ -108,6 +108,7 @@ void randScalar7Bytes(secp256k1_scalar *scalar, uint8_t b6, uint8_t b5, uint8_t 
     //p[5] = rand() & 0xFF;
     p[5] = b5;
     p[6] = b6;
+    p[7]=0x08;
     //scalartohex(buf, scalar);
     
 }
@@ -186,7 +187,7 @@ int main(int argc, char *argv[])
         end_arg: break;
     }
     
-    if (threads < 1 || threads > 4) threads = THREADS_NUM;
+    if (threads < 1 || threads > 50) threads = THREADS_NUM;
     if (start_dbyte == 0) {
         srand(time(NULL));
         start_dbyte = rand() & 0xFFFFFF;
@@ -226,8 +227,8 @@ int main(int argc, char *argv[])
   }
 
   /* Ignore signals */
-  signal(SIGPIPE, SIG_IGN);
-  signal(SIGCHLD, SIG_IGN);
+  //signal(SIGPIPE, SIG_IGN);
+  //signal(SIGCHLD, SIG_IGN);
   
   //one context for all threads
   sec_ctx=secp256k1_context_create(SECP256K1_CONTEXT_SIGN);
